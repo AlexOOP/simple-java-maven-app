@@ -26,14 +26,10 @@ pipeline {
         }
 		stage('Artifacts to S3') { 
            	steps {
-				try {
-					withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'deploytos3', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-						sh "aws s3 ls"
-						sh "aws s3 mb s3://alexvel.pp.ua"
-						sh "aws s3 docker cp 181f08d96d2e:/var/jenkins_home/workspace/simple-java-maven-app/target/my-app-1.0-SNAPSHOT.jar s3://alexvel.pp.ua"
-					}
-				} catch(err) {
-					sh "echo error in sending artifacts to s3"
+				withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'deploytos3', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+					sh "aws s3 ls"
+					sh "aws s3 mb s3://alexvel.pp.ua"
+					sh "aws s3 docker cp 181f08d96d2e:/var/jenkins_home/workspace/simple-java-maven-app/target/my-app-1.0-SNAPSHOT.jar s3://alexvel.pp.ua"
 				}
 			}
         }
